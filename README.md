@@ -1,5 +1,11 @@
 # FlexBE App
 
+This repository is a fork of the original [FlexBE App](https://github.com/FlexBE/flexbe_app), based on its `melodic` branch. It includes these changes:
+
+- **NW.js installation:** follows download redirects, retries failed downloads, and selects the binary architecture explicitly. The upstream NW.js 0.42.3 release does not provide a Linux ARM64 binary, so installation reports that limitation instead of selecting an incompatible binary.
+- **Automatic state reload:** detects edits to Python state source files, reparses their definitions, and updates states in the current behavior without restarting the app. Python module caching is cleared so the parser reads the changed source.
+- **Window update notice:** removes the in-app “New release available” banner, which otherwise suggests updating from the upstream repository.
+
 User interface (editor + runtime control) for the FlexBE behavior engine.
 
 ## Installation
