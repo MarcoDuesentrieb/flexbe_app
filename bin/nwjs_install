@@ -28,15 +28,23 @@ else
 	OS="linux"
 fi
 ARCH="x64"
-if [ `uname -m` == "x86_64" ]; then
-	ARCH="x64"
-else
-	ARCH="ia32"
-fi
+case "$(uname -m)" in
+	x86_64) ARCH="x64" ;;
+	i386|i486|i586|i686) ARCH="ia32" ;;
+	aarch64|arm64)
+		echo "NW.js ${VERSION} does not provide a Linux ARM64 build." >&2
+		exit 1
+		;;
+	*)
+		echo "Unsupported architecture for NW.js: $(uname -m)" >&2
+		exit 1
+		;;
+esac
 
 # ready to go
 echo "Downloading nwjs..."
-curl -s -o $TEMPFILE https://dl.nwjs.io/$VERSION/nwjs-$VERSION-$OS-$ARCH.tar.gz
+curl --fail --location --retry 3 --output "$TEMPFILE" \
+	"https://dl.nwjs.io/$VERSION/nwjs-$VERSION-$OS-$ARCH.tar.gz"
 
 echo "Unpacking..."
 tar -xzf $TEMPFILE --strip-components 1
